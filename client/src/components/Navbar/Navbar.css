@@ -1,0 +1,35 @@
+.navbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 8%;
+    background:#ffffff;
+    border-bottom:1px solid #e5e7eb;
+}
+
+.logo a{
+    text-decoration:none;
+    color:#2563eb;
+    font-size:1.6rem;
+    font-weight:bold;
+}
+
+.nav-links{
+    display:flex;
+    gap:30px;
+}
+
+.nav-links a{
+    text-decoration:none;
+    color:#374151;
+    font-weight:500;
+    transition:.3s;
+}
+
+.nav-links a:hover{
+    color:#2563eb;
+}
+
+.nav-links .active{
+    color:#2563eb;
+}
