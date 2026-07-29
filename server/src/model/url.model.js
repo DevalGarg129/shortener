@@ -1,5 +1,4 @@
-const mongoose = require('mongoose');
-
+import mongoose from "mongoose";
 const urlSchema = new mongoose.Schema({
     longUrl: {
         type: String,

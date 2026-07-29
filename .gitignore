@@ -1,2 +1,30 @@
-client/.node_modules
-server/.node_modules
+# Dependencies
+client/node_modules/
+server/node_modules/
+
+# Environment files
+client/.env
+server/.env
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+logs/
+
+# Build
+client/dist/
+server/dist/
+build/
+
+# Coverage
+coverage/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
