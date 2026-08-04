@@ -1,8 +1,29 @@
-import React from "react";
+import { useEffect, useState } from "react";
+import Navbar from "../components/Navbar/Navbar";
+import UrlTable from "../components/UrlTable/UrlTable";
+import useUrl from "../hooks/useUrl";
 
 const Dashboard = () => {
-    return(
-        <h1>Dashboard</h1>
+    const { fetchUrls, loading } = useUrl();
+    const [urls, setUrls] = useState([]);
+
+    useEffect(() => {
+        const loadUrls = async () => {
+            const data = await fetchUrls();
+            setUrls(data);
+        };
+        loadUrls();
+    }, []);
+
+    return (
+        <>
+            <Navbar />
+            <UrlTable
+                urls={urls}
+                onDelete={loadUrls}
+                loading={loading}
+            />
+        </>
     );
 };
 

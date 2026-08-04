@@ -10,4 +10,6 @@ const Hero = () => {
             </p>
         </section>
     )
-}
+};
+
+export default Hero;

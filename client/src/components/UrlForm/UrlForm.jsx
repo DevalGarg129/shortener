@@ -1,60 +1,63 @@
-import { use, useState } from "react";
+import { useState } from "react";
 import { FaLink } from "react-icons/fa";
-import toast from 'react-hot-toast';
-
-import { createShortUrl } from "../../services/url.service.js";
 import UrlCard from "../UrlCard/UrlCard";
+import useUrl from "../../hooks/useUrl";
+
+import "./UrlForm.css";
 
 const UrlForm = () => {
     const [formData, setFormData] = useState({
         longUrl: "",
         customAlias: "",
-        expiresIn: ""
+        expiresIn: "",
     });
 
-    const [loading, setLoading] = useState(false);
     const [generatedUrl, setGeneratedUrl] = useState(null);
+
+    // Custom Hook
+    const { createUrl, loading } = useUrl();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+
         setFormData((prev) => ({
             ...prev,
-            [name]: value
+            [name]: value,
         }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if(!formData.longUrl.trim()){
-            toast.error("Please Enter a Valid URL");
-            return;
-        }
-        try{
-            setLoading(true);
-            const response = await createShortUrl(formData);
-            setGeneratedUrl(response.data.data);
-            toast.success("Short URL Created Successfully");
+
+        try {
+            const data = await createUrl(formData);
+
+            setGeneratedUrl(data);
+
             setFormData({
                 longUrl: "",
                 customAlias: "",
-                expiresIn: ""
+                expiresIn: "",
             });
-        }catch(error){
-            toast.error(error.response?.data?.message || "Something Went Wrong");
-        }finally{
-            setLoading(false);
+        } catch (error) {
+            // Error toast is already handled inside useUrl()
+            console.error(error);
         }
     };
 
-    return(
+    return (
         <div className="url-form-container">
-            <form>
+            <form
+                className="url-form"
+                onSubmit={handleSubmit}
+            >
                 <div className="input-group">
-                    <FaLink/>
+                    <FaLink />
+
                     <input
                         type="url"
                         name="longUrl"
-                        placeholder="Enter long Url"
+                        placeholder="Enter Long URL"
                         value={formData.longUrl}
                         onChange={handleChange}
                         required
@@ -63,19 +66,20 @@ const UrlForm = () => {
 
                 <div className="row">
                     <input
-                        type='text'
-                        name='customAlias'
-                        placeholder="Customer Alias (optional)"
+                        type="text"
+                        name="customAlias"
+                        placeholder="Custom Alias (Optional)"
                         value={formData.customAlias}
                         onChange={handleChange}
                     />
+
                     <input
                         type="number"
                         name="expiresIn"
                         placeholder="Expiry (Days)"
                         value={formData.expiresIn}
                         onChange={handleChange}
-                        min='1'
+                        min="1"
                     />
                 </div>
 
@@ -83,19 +87,15 @@ const UrlForm = () => {
                     type="submit"
                     disabled={loading}
                 >
-                    {
-                        loading
-                            ? "Creating..."
-                            : "Shorten URL"
-                    }
+                    {loading ? "Creating..." : "Shorten URL"}
                 </button>
             </form>
-            {
-                generatedUrl &&
-                <UrlCard url={generatedUrl}/>
-            }
+
+            {generatedUrl && (
+                <UrlCard url={generatedUrl} />
+            )}
         </div>
-    )
+    );
 };
 
 export default UrlForm;
